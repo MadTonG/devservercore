@@ -1,6 +1,7 @@
 name: Docker image
 
 on:
+  workflow_dispatch:  # 手动触发
   push:
     branches: [ $default-branch ]
   pull_request:
