@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
-LABEL description="mingw-builds-x.y.z" maintainer="Leo"
+LABEL description="servercore:ltsc2019 with cdas environment" maintainer="Leo"
 
 # Disable crash dialog for release-mode runtimes
 RUN reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v Disabled /t REG_DWORD /d 1 /f
@@ -20,7 +20,6 @@ ARG SONAR_SCANNER_VERSION=4.8.0.2856
 ARG SONAR_SCANNER_DOWNLOAD_URL=https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-windows.zip
 
 
-
 SHELL ["powershell", "-Command"]
 
 # Install choco
@@ -29,18 +28,18 @@ RUN Set-ExecutionPolicy Bypass -Scope Process -Force; \
     iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 # Install tools
-RUN $ErrorActionPreference = 'Stop'; \
-    choco install -y python --version 3.11.0 && \
-    choco install -y 7zip --version 22.1 && \
-    choco install -y git --version 2.39.2 --params "/GitAndUnixToolsOnPath" && \
-    choco install -y conan --version 1.58.0 && \
-    choco install -y ninja --version 1.11.1 && \
-    choco install -y cmake --version 3.25.2 && \
+RUN $ErrorActionPreference = 'Stop' ; \
+    choco install -y python --version 3.11.0 ; \
+    choco install -y 7zip --version 22.1 ; \
+    choco install -y git --version 2.39.2 --params "/GitAndUnixToolsOnPath" ; \
+    choco install -y conan --version 1.58.0 ; \
+    choco install -y ninja --version 1.11.1 ; \
+    choco install -y cmake --version 3.25.2 ; \
     choco install -y gitlab-runner --version 1.58.0
    
 # Install MSVC
 # RUN powershell -NoProfile -InputFormat None -Command \
-#     choco install visualcpp-build-tools --version 15.0.26228.20170424 -y; \
+#     choco install -y visualcpp-build-tools --version 15.0.26228.20170424 ; \
 #     Write-Host 'Waiting for Visual C++ Build Tools to finish'; \
 #     Wait-Process -Name vs_installer
 
