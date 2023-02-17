@@ -35,7 +35,7 @@ RUN $ErrorActionPreference = 'Stop' ; \
     choco install -y conan --version 1.58.0 ; \
     choco install -y ninja --version 1.11.1 ; \
     choco install -y cmake --version 3.25.2 ; \
-    choco install -y gitlab-runner --version 1.58.0
+    choco install -y gitlab-runner --version 15.8.0 --params="'/InstallDir=c:\gitlab-runner /Service'"
    
 # Install MSVC
 # RUN powershell -NoProfile -InputFormat None -Command \
