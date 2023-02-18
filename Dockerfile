@@ -2,6 +2,7 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2019
 
 LABEL description="servercore:ltsc2019 with cdas environment" maintainer="Leo"
 
+SHELL ["powershell", "-Command"]
 # Disable crash dialog for release-mode runtimes
 # RUN reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v Disabled /t REG_DWORD /d 1 /f
 # RUN reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v DontShowUI /t REG_DWORD /d 1 /f
@@ -20,9 +21,8 @@ ARG SONAR_SCANNER_VERSION=4.8.0.2856
 ARG SONAR_SCANNER_DOWNLOAD_URL=https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-windows.zip
 
 
-ENV SONAR_SCANNER_DOWNLOAD_URL=
+# ENV SONAR_SCANNER_DOWNLOAD_URL
 
-SHELL ["powershell", "-Command"]
 
 # Install choco
 # RUN Set-ExecutionPolicy Bypass -Scope Process -Force; \
@@ -50,6 +50,6 @@ SHELL ["powershell", "-Command"]
 
 # Install sonar-scanner-cli
 RUN $ErrorActionPreference = 'Stop' ; \
-    wget -Uri $SONAR_SCANNER_DOWNLOAD_URL -OutFile c:\sonar-scanner-cli.zip ; \
+    wget -Uri ${SONAR_SCANNER_DOWNLOAD_URL} -OutFile c:\sonar-scanner-cli.zip ; \
     Expand-Archive -Path c:\sonar-scanner-cli.zip -DestinationPath c:\ ; \
     Remove-Item c:\sonar-scanner-cli.zip -Force
