@@ -6,23 +6,9 @@ LABEL description="servercore:ltsc2019 with cdas environment" maintainer="Leo"
 # RUN reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v Disabled /t REG_DWORD /d 1 /f
 # RUN reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v DontShowUI /t REG_DWORD /d 1 /f
 
-# ARG MINGW_VERSION=8.1.0
-# ARG MINGW_ARCH=x86_64
-# ARG MINGW_THREADS=posix
-# ARG MINGW_EXCEPTION=seh
-# ARG MINGW_RT_FILE_SUFFIX=6
-# ARG MINGW_BUILD_REVISION=0
-# ARG MINGW_PROJECT_URL=https://sourceforge.net/projects/mingw-w64/files
-# ARG MINGW_TOOLCHAIN_URL=Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds
-# ARG MINGW_DOWNLOAD_URL=${MINGW_PROJECT_URL}/${MINGW_TOOLCHAIN_URL}/${MINGW_VERSION}/threads-${MINGW_THREADS}/${MINGW_EXCEPTION}/x86_64-${MINGW_VERSION}-release-${MINGW_THREADS}-${MINGW_EXCEPTION}-rt_v${MINGW_RT_FILE_SUFFIX}-rev${MINGW_BUILD_REVISION}.7z
-# ARG SONAR_SCANNER_VERSION=
-# ARG SONAR_SCANNER_DOWNLOAD_URL=https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-windows.zip
-
-
 # ENV SONAR_SCANNER_DOWNLOAD_URL
 # ENV SONAR_SCANNER_VERSION 4.8.0.2856
 # ENV SONAR_SCANNER_DOWNLOAD_URL "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-windows.zip"
-
 
 # Install choco
 # RUN powershell.exe -Command \
@@ -35,14 +21,15 @@ LABEL description="servercore:ltsc2019 with cdas environment" maintainer="Leo"
 #     choco install -y git --version 2.39.2 --params "/GitAndUnixToolsOnPath" ;
 
 RUN powershell -Command \
-	git.exe --version
+	$ErrorActionPreference = 'Stop'; \
+	& 'C:\Program Files\Git\bin\git.exe' --version
 	
 RUN powershell -Command \
-    $ErrorActionPreference = 'Stop'; \
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
-    wget https://www.python.org/ftp/python/3.11.2/python-3.11.2-amd64.exe -OutFile c:\python-3.11.2-amd64.exe ; \
-    Start-Process c:\python-3.11.2-amd64.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1' -Wait ; \
-    Remove-Item c:\python-3.11.2-amd64.exe -Force
+	$ErrorActionPreference = 'Stop'; \
+	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+	wget https://www.python.org/ftp/python/3.11.2/python-3.11.2-amd64.exe -OutFile c:\python-3.11.2-amd64.exe ; \
+	Start-Process c:\python-3.11.2-amd64.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1' -Wait ; \
+	Remove-Item c:\python-3.11.2-amd64.exe -Force
 
 RUN powershell -Command \
 	pip install --upgrade pip
