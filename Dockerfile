@@ -34,15 +34,19 @@ LABEL description="servercore:ltsc2019 with cdas environment" maintainer="Leo"
 # RUN $ErrorActionPreference = 'Stop' ; \
 #     choco install -y git --version 2.39.2 --params "/GitAndUnixToolsOnPath" ;
 
+RUN powershell -Command \
+	git.exe --version
 	
-RUN powershell.exe -Command \
+RUN powershell -Command \
     $ErrorActionPreference = 'Stop'; \
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
     wget https://www.python.org/ftp/python/3.11.2/python-3.11.2-amd64.exe -OutFile c:\python-3.11.2-amd64.exe ; \
     Start-Process c:\python-3.11.2-amd64.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1' -Wait ; \
     Remove-Item c:\python-3.11.2-amd64.exe -Force
 
-RUN ["pip", "install", "conan==1.59.0", "ninja==1.11.1", "cmake==3.25.2", "clang-fomat", "clang-tidy"]
+RUN powershell -Command \
+	pip install --upgrade pip
+RUN ["pip", "install", "conan==1.59.0", "ninja==1.11.1", "cmake==3.25.2", "clang-format", "clang-tidy"]
    
 # Install MSVC
 # RUN powershell -NoProfile -InputFormat None -Command \
@@ -77,7 +81,5 @@ RUN powershell -Command \
 	setx /M Path "%path%;c:\sonar-scanner-cli\bin" ; \
 	Remove-Item c:\sonar-scanner-cli.zip -Force
 	
-RUN powershell -Command \
-	git.exe --version
 	
 CMD ["g++.exe --version"]
