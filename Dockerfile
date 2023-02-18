@@ -22,7 +22,7 @@ LABEL description="servercore:ltsc2019 with cdas environment" maintainer="Leo"
 
 RUN powershell -Command \
 	$ErrorActionPreference = 'Stop'; \
-	& 'C:\Program Files\Git\bin\git.exe' --version
+	'C:\Program Files\Git\bin\git.exe --version'
 	
 RUN powershell -Command \
 	$ErrorActionPreference = 'Stop'; \
