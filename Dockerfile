@@ -32,7 +32,7 @@ RUN powershell -Command \
 	Remove-Item c:\python-3.11.2-amd64.exe -Force
 
 RUN powershell -Command \
-	pip install --upgrade pip
+	python.exe -m pip install --upgrade pip
 RUN ["pip", "install", "conan==1.59.0", "ninja==1.11.1", "cmake==3.25.2", "clang-format", "clang-tidy"]
    
 # Install MSVC
