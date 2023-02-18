@@ -42,7 +42,7 @@ RUN powershell.exe -Command \
     Start-Process c:\python-3.11.2-amd64.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1' -Wait ; \
     Remove-Item c:\python-3.11.2-amd64.exe -Force
 
-RUN ["pip", "install", "conan==1.59.0", "ninja==1.11.1", "cmake==3.25.2", "clang-fomat==15.0.7", "clang-tidy=15.0.2.1"]
+RUN ["pip", "install", "conan==1.59.0", "ninja==1.11.1", "cmake==3.25.2", "clang-fomat==15.0.7", "clang-tidy==15.0.2.1"]
    
 # Install MSVC
 # RUN powershell -NoProfile -InputFormat None -Command \
