@@ -23,7 +23,7 @@ jobs:  # workflow中的job
 
   push_to_registry:  # job的名字
     name: Push Docker image to Docker Hub
-    runs-on: servercore:ltsc2019   # job运行的基础环境
+    runs-on: windows-2019   # job运行的基础环境
 
     steps:  # 一个job由一个或多个step组成
       - name: Check out the repo
@@ -42,7 +42,7 @@ jobs:  # workflow中的job
           images: slzlzxlz/devservercore
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3 # docker build & push
+        uses: docker/build-push-action@v4 # docker build & push
         with:
           context: .
           push: true
