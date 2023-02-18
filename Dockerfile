@@ -17,8 +17,10 @@ LABEL description="servercore:ltsc2019 with cdas environment" maintainer="Leo"
 # ARG MINGW_TOOLCHAIN_URL=Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds
 # ARG MINGW_DOWNLOAD_URL=${MINGW_PROJECT_URL}/${MINGW_TOOLCHAIN_URL}/${MINGW_VERSION}/threads-${MINGW_THREADS}/${MINGW_EXCEPTION}/x86_64-${MINGW_VERSION}-release-${MINGW_THREADS}-${MINGW_EXCEPTION}-rt_v${MINGW_RT_FILE_SUFFIX}-rev${MINGW_BUILD_REVISION}.7z
 ARG SONAR_SCANNER_VERSION=4.8.0.2856
-ARG SONAR_SCANNER_DOWNLOAD_URL=https://binaries.sonarsource.com/Distribution/sonar-scanner-cli
+ARG SONAR_SCANNER_DOWNLOAD_URL=https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-windows.zip
 
+
+ENV SONAR_SCANNER_DOWNLOAD_URL=
 
 SHELL ["powershell", "-Command"]
 
@@ -48,6 +50,6 @@ SHELL ["powershell", "-Command"]
 
 # Install sonar-scanner-cli
 RUN $ErrorActionPreference = 'Stop' ; \
-    wget -Uri ${SONAR_SCANNER_DOWNLOAD_URL}/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-windows.zip -OutFile c:\sonar-scanner-cli.zip ; \
+    wget -Uri $SONAR_SCANNER_DOWNLOAD_URL -OutFile c:\sonar-scanner-cli.zip ; \
     Expand-Archive -Path c:\sonar-scanner-cli.zip -DestinationPath c:\ ; \
     Remove-Item c:\sonar-scanner-cli.zip -Force
