@@ -25,10 +25,10 @@ LABEL description="servercore:ltsc2019 with cdas environment" maintainer="Leo"
 
 
 # Install choco
-RUN powershell.exe -Command \
-	Set-ExecutionPolicy Bypass -Scope Process -Force; \
-	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; \
-	iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+# RUN powershell.exe -Command \
+# 	Set-ExecutionPolicy Bypass -Scope Process -Force; \
+# 	[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; \
+# 	iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 # Install tools
 # RUN $ErrorActionPreference = 'Stop' ; \
@@ -38,7 +38,7 @@ RUN powershell.exe -Command \
 RUN powershell.exe -Command \
     $ErrorActionPreference = 'Stop'; \
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
-    wget https://www.python.org/ftp/python/3.11.2/python-3.11.2-amd64.exe -OutFile c:\python-3.10.0.exe ; \
+    wget https://www.python.org/ftp/python/3.11.2/python-3.11.2-amd64.exe -OutFile c:\python-3.11.2-amd64.exe ; \
     Start-Process c:\python-3.11.2-amd64.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1' -Wait ; \
     Remove-Item c:\python-3.11.2-amd64.exe -Force
 
@@ -76,5 +76,8 @@ RUN powershell -Command \
 	Expand-Archive -Path c:\sonar-scanner-cli.zip -DestinationPath c:\sonar-scanner-cli ; \
 	setx /M Path "%path%;c:\sonar-scanner-cli\bin" ; \
 	Remove-Item c:\sonar-scanner-cli.zip -Force
+	
+RUN powershell -Command \
+	git.exe --version
 	
 CMD ["g++.exe --version"]
