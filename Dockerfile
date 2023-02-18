@@ -3,8 +3,8 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2019
 LABEL description="servercore:ltsc2019 with cdas environment" maintainer="Leo"
 
 # Disable crash dialog for release-mode runtimes
-RUN reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v Disabled /t REG_DWORD /d 1 /f
-RUN reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v DontShowUI /t REG_DWORD /d 1 /f
+# RUN reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v Disabled /t REG_DWORD /d 1 /f
+# RUN reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v DontShowUI /t REG_DWORD /d 1 /f
 
 # ARG MINGW_VERSION=8.1.0
 # ARG MINGW_ARCH=x86_64
@@ -25,23 +25,23 @@ RUN reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v DontSho
 
 
 # Install choco
-RUN Set-ExecutionPolicy Bypass -Scope Process -Force; \
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; \
-    iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+# RUN Set-ExecutionPolicy Bypass -Scope Process -Force; \
+#     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; \
+#     iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 # Install tools
-RUN $ErrorActionPreference = 'Stop' ; \
-    choco install -y git --version 2.39.2 --params "/GitAndUnixToolsOnPath" ;
+# RUN $ErrorActionPreference = 'Stop' ; \
+#     choco install -y git --version 2.39.2 --params "/GitAndUnixToolsOnPath" ;
 
 	
-RUN powershell.exe -Command \
-    $ErrorActionPreference = 'Stop'; \
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
-    wget https://www.python.org/ftp/python/3.11.2/python-3.11.2-amd64.exe -OutFile c:\python-3.10.0.exe ; \
-    Start-Process c:\python-3.11.2-amd64.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1' -Wait ; \
-    Remove-Item c:\python-3.11.2-amd64.exe -Force
+# RUN powershell.exe -Command \
+#     $ErrorActionPreference = 'Stop'; \
+#     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+#     wget https://www.python.org/ftp/python/3.11.2/python-3.11.2-amd64.exe -OutFile c:\python-3.10.0.exe ; \
+#     Start-Process c:\python-3.11.2-amd64.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1' -Wait ; \
+#     Remove-Item c:\python-3.11.2-amd64.exe -Force
 
-RUN ["pip", "install", "conan==1.59.0", "ninja==1.11.1", "cmake==3.25.2", "clang-fomat==15.0.7", "clang-tidy=15.0.2.1"]
+# RUN ["pip", "install", "conan==1.59.0", "ninja==1.11.1", "cmake==3.25.2", "clang-fomat==15.0.7", "clang-tidy=15.0.2.1"]
    
 # Install MSVC
 # RUN powershell -NoProfile -InputFormat None -Command \
@@ -50,30 +50,30 @@ RUN ["pip", "install", "conan==1.59.0", "ninja==1.11.1", "cmake==3.25.2", "clang
 #     Wait-Process -Name vs_installer
 
 # 7zip
-RUN powershell -Command \
-	$ErrorActionPreference = 'Stop'; \
-	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
-	wget https://www.7-zip.org/a/7z2201-x64.exe -OutFile c:\7z2201-x64.exe ; \
-	Start-Process c:\7z2201-x64.exe -ArgumentList '/S /D="c:\7-Zip"' -Wait ; \
-	setx /M Path "%path%;c:\7-Zip" ; \
-	Remove-Item c:\7z2201-x64.exe -Force
+# RUN powershell -Command \
+# 	$ErrorActionPreference = 'Stop'; \
+# 	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+# 	wget https://www.7-zip.org/a/7z2201-x64.exe -OutFile c:\7z2201-x64.exe ; \
+# 	Start-Process c:\7z2201-x64.exe -ArgumentList '/S /D="c:\7-Zip"' -Wait ; \
+# 	setx /M Path "%path%;c:\7-Zip" ; \
+# 	Remove-Item c:\7z2201-x64.exe -Force
 
 # Install mingw8.1.0
-RUN powershell -Commnad \
-	$ErrorActionPreference = 'Stop'; \
-	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
-	wget "https://sourceforge.net/projects/mingw-w64/files/Toolchains targetting Win64/Personal Builds/mingw-builds/8.1.0/threads-posix/seh/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z" -OutFile c:\mingw81.7z ; \
-	Start-Process 7z.exe x c:\mingw81.7z c:\ ; \
-	setx /M Path "%path%;c:\mingw64\bin" ; \
-	Remove-Item c:\mingw81.7z -Force
+# RUN powershell -Commnad \
+# 	$ErrorActionPreference = 'Stop'; \
+# 	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+# 	wget "https://sourceforge.net/projects/mingw-w64/files/Toolchains targetting Win64/Personal Builds/mingw-builds/8.1.0/threads-posix/seh/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z" -OutFile c:\mingw81.7z ; \
+# 	Start-Process 7z.exe x c:\mingw81.7z c:\ ; \
+# 	setx /M Path "%path%;c:\mingw64\bin" ; \
+# 	Remove-Item c:\mingw81.7z -Force
 
 # Install sonar-scanner-cli
-RUN powershell -Command \
-	$ErrorActionPreference = 'Stop'; \
-	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
-	wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-windows.zip -OutFile c:\sonar-scanner-cli.zip ; \
-	Expand-Archive -Path c:\sonar-scanner-cli.zip -DestinationPath c:\sonar-scanner-cli ; \
-	setx /M Path "%path%;c:\sonar-scanner-cli\bin" ; \
-	Remove-Item c:\sonar-scanner-cli.zip -Force
+# RUN powershell -Command \
+# 	$ErrorActionPreference = 'Stop'; \
+# 	[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+# 	wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-windows.zip -OutFile c:\sonar-scanner-cli.zip ; \
+# 	Expand-Archive -Path c:\sonar-scanner-cli.zip -DestinationPath c:\sonar-scanner-cli ; \
+# 	setx /M Path "%path%;c:\sonar-scanner-cli\bin" ; \
+# 	Remove-Item c:\sonar-scanner-cli.zip -Force
 	
-CMD ["g++.exe --version"]
+CMD ["git --version"]
