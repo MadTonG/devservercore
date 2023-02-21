@@ -11,8 +11,7 @@ RUN powershell.exe -Command \
 	iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
 # 安装 Mingw-w64 和 Git
-RUN $ErrorActionPreference = 'Stop' ; \
-    choco install -y git --version 2.39.2 --params "/GitAndUnixToolsOnPath" ; \
+RUN choco install -y git --version 2.39.2 --params "/GitAndUnixToolsOnPath" ; \
 	choco install -y mingw --version 8.1.0 ;
 
 # 安装 Python 3.11.2
@@ -26,7 +25,7 @@ RUN powershell -Command \
 # 安装 Conan、Ninja、CMake
 RUN powershell -Command \
 	$ErrorActionPreference = 'Stop'; \
-	Start-Process python.exe -ArgumentList '-m pip install --upgrade pip'
+	Start-Process python.exe -ArgumentList '-m pip install --upgrade pip' -Wait
 RUN ["pip", "install", "conan==1.59.0", "ninja==1.11.1", "cmake==3.25.2"]
    
 # 安装 Clang-format 和 Clang-tidy
